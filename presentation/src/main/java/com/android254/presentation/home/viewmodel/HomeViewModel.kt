@@ -24,8 +24,11 @@ import com.android254.presentation.home.mappers.toSpeakersPresentation
 import com.android254.presentation.home.viewstate.HomeViewState
 import com.android254.presentation.sessions.mappers.toPresentationModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import ke.droidcon.kotlin.datasource.remote.di.IoDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -37,9 +40,11 @@ class HomeViewModel
     constructor(
         homeRepo: HomeRepo,
         private val syncDataWorkManager: SyncDataWorkManager,
+        @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     ) : ViewModel() {
         val isSyncing =
             syncDataWorkManager.isSyncing
+                .flowOn(ioDispatcher)
                 .stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.WhileSubscribed(5000L),
@@ -62,6 +67,7 @@ class HomeViewModel
                         sessions = it.sessions.map { session -> session.toPresentationModel() },
                     )
                 }
+                .flowOn(ioDispatcher)
                 .stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.WhileSubscribed(5000L),

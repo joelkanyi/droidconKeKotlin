@@ -20,8 +20,11 @@ import androidx.lifecycle.viewModelScope
 import com.android254.domain.repos.OrganizersRepo
 import com.android254.presentation.models.OrganizingTeamMember
 import dagger.hilt.android.lifecycle.HiltViewModel
+import ke.droidcon.kotlin.datasource.remote.di.IoDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -43,6 +46,7 @@ class AboutViewModel
     @Inject
     constructor(
         private val organizersRepo: OrganizersRepo,
+        @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     ) : ViewModel() {
         val uiState =
             organizersRepo.getOrganizers()
@@ -60,6 +64,7 @@ class AboutViewModel
                 }
                 .onStart { AboutScreenUiState.Loading }
                 .catch { AboutScreenUiState.Error(message = "An unexpected error occurred") }
+                .flowOn(ioDispatcher)
                 .stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.WhileSubscribed(5000L),

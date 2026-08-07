@@ -26,6 +26,7 @@ import com.droidconke.chai.ChaiDCKE22Theme
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -38,6 +39,7 @@ import org.robolectric.shadows.ShadowLog
 @Config(instrumentedPackages = ["androidx.loader.content"], sdk = [33])
 class FeedScreenTest {
     private val repo = mockk<FeedRepo>()
+    private val testDispatcher = UnconfinedTestDispatcher()
 
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -66,7 +68,7 @@ class FeedScreenTest {
 
         composeTestRule.setContent {
             ChaiDCKE22Theme {
-                FeedRoute(feedViewModel = FeedViewModel(repo))
+                FeedRoute(feedViewModel = FeedViewModel(repo, testDispatcher))
             }
         }
 
@@ -95,7 +97,7 @@ class FeedScreenTest {
 
         composeTestRule.setContent {
             ChaiDCKE22Theme {
-                FeedRoute(feedViewModel = FeedViewModel(repo))
+                FeedRoute(feedViewModel = FeedViewModel(repo, testDispatcher))
             }
         }
         composeTestRule.onNodeWithTag("share_button").assertExists()

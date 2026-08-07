@@ -28,6 +28,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -38,6 +39,7 @@ import org.robolectric.annotation.Config
 class SpeakerDetailsScreenTest {
     private val speakersRepo = mockk<SpeakersRepo>()
     private val mockSavedStateHandle = mockk<SavedStateHandle>()
+    private val testDispatcher = UnconfinedTestDispatcher()
 
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -53,6 +55,7 @@ class SpeakerDetailsScreenTest {
                 name = "Harun Wangereka",
                 SpeakerDetailsScreenViewModel(
                     speakersRepo = speakersRepo,
+                    ioDispatcher = testDispatcher,
                 ),
             )
         }

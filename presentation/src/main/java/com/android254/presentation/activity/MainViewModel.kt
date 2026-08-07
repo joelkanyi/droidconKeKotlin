@@ -21,12 +21,15 @@ import com.android254.domain.repos.SessionsRepo
 import com.android254.presentation.sessions.mappers.toPresentationModel
 import com.android254.presentation.sessions.models.SessionUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import ke.droidcon.kotlin.datasource.remote.di.IoDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.datetime.Clock
 import javax.inject.Inject
@@ -37,6 +40,7 @@ class MainViewModel
     constructor(
         private val sessionsRepo: SessionsRepo,
         private val clock: Clock,
+        @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     ) : ViewModel() {
         private val ticker =
             flow {
@@ -64,7 +68,8 @@ class MainViewModel
                             },
                     )
                 }
-            }.stateIn(
+            }.flowOn(ioDispatcher)
+            .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000),
                 initialValue = SessionUIState(),

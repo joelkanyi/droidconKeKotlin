@@ -81,7 +81,7 @@ class SessionsManager
                         },
                     eventDays = eventDays,
                 )
-            }
+            }.flowOn(ioDispatcher)
 
         private fun Long.toEventDay(): String {
             val date = Date(this)
