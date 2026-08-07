@@ -214,7 +214,6 @@ fun TimeHeader(time: String) {
         verticalAlignment = Alignment.CenterVertically,
         modifier =
             Modifier
-                .background(MaterialTheme.chaiColorsPalette.surfaces)
                 .fillMaxWidth()
                 .padding(vertical = 12.dp),
     ) {
