@@ -36,10 +36,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android254.presentation.common.components.DroidconAppBarWithFilter
+import com.android254.presentation.common.fakedata.fakeSessions
+import com.android254.presentation.common.resultstatus.ResultStatus
 import com.android254.presentation.models.EventDate
 import com.android254.presentation.models.SessionsFilterOption
 import com.android254.presentation.sessions.components.CustomSwitch
@@ -217,10 +221,12 @@ fun SessionsScreen(
 
 @ChaiLightAndDarkComposePreview
 @Composable
-fun SessionsScreenPreview() {
+fun SessionsScreenPreview(
+    @PreviewParameter(SessionsUiStateProvider::class) sessionsUiState: SessionsUiState,
+) {
     ChaiDCKE22Theme {
         SessionsScreen(
-            sessionsUiState = SessionsUiState(),
+            sessionsUiState = sessionsUiState,
             selectedEventDate = EventDate("1", day = 1),
             isRefreshing = false,
             currentSelections = listOf(),
@@ -228,6 +234,26 @@ fun SessionsScreenPreview() {
             onEvent = {},
         )
     }
+}
+
+class SessionsUiStateProvider : PreviewParameterProvider<SessionsUiState> {
+    override val values =
+        sequenceOf(
+            SessionsUiState(
+                sessionStatus = ResultStatus.Loading,
+            ),
+            SessionsUiState(
+                sessionStatus = ResultStatus.Empty("No sessions found"),
+            ),
+            SessionsUiState(
+                sessionStatus = ResultStatus.Error("Something went wrong"),
+            ),
+            SessionsUiState(
+                sessions = fakeSessions,
+                sessionStatus = ResultStatus.Success,
+                eventDays = listOf(EventDate("1", day = 1), EventDate("2", day = 2)),
+            ),
+        )
 }
 
 enum class SessionScreenState {

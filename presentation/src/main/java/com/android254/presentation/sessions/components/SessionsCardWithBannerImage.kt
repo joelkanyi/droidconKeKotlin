@@ -134,21 +134,19 @@ fun SpeakerDetailsAndLikeButtonComponent(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         speakers.forEach { speaker ->
-            speaker.speakerImage?.let {
-                AsyncImage(
-                    model = speaker.speakerImage,
-                    contentDescription = "session speaker image",
-                    modifier =
-                        Modifier
-                            .size(32.dp)
-                            .border(
-                                width = 1.dp,
-                                color = ChaiTeal,
-                                shape = CircleShape,
-                            )
-                            .clip(CircleShape),
-                )
-            }
+            AsyncImage(
+                model = speaker.speakerImage,
+                contentDescription = "session speaker image",
+                modifier =
+                    Modifier
+                        .size(32.dp)
+                        .border(
+                            width = 1.dp,
+                            color = ChaiTeal,
+                            shape = CircleShape,
+                        )
+                        .clip(CircleShape),
+            )
             Spacer(modifier = Modifier.width(8.dp))
         }
 

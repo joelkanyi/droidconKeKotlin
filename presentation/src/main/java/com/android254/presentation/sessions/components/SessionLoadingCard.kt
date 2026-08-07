@@ -45,7 +45,7 @@ fun SessionsLoadingCard() {
             Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
-        shape = RoundedCornerShape(5),
+        shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.chaiColorsPalette.cardsBackground),
     ) {
@@ -57,42 +57,43 @@ fun SessionsLoadingCard() {
                     MaterialTheme.chaiColorsPalette.loadingStateOnCardsColor.copy(alpha = 0.3f),
                 ),
         ) { brush ->
-            Row(
+            Column(
                 Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight()
-                    .padding(horizontal = 8.dp, vertical = 8.dp),
+                    .padding(16.dp),
             ) {
-                Column(
-                    modifier =
-                        Modifier
-                            .weight(0.15f),
-                    horizontalAlignment = Alignment.End,
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    LoadingBox(height = 22.dp, widthRatio = 1.0f, brush = brush)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    LoadingBox(height = 22.dp, widthRatio = 0.6f, brush = brush)
+                    LoadingBox(height = 20.dp, widthRatio = 0.7f, brush = brush)
+                    LoadingBox(height = 32.dp, width = 32.dp, brush = brush, cornerRadius = 16.dp)
                 }
-                Spacer(modifier = Modifier.width(12.dp))
-                Column(
-                    modifier =
-                        Modifier
-                            .weight(0.85f),
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    LoadingBox(height = 20.dp, width = 60.dp, brush = brush)
+                    LoadingBox(height = 20.dp, width = 60.dp, brush = brush)
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    LoadingBox(height = 30.dp, width = 30.dp, brush = brush, cornerRadius = 15.dp)
+                    Spacer(modifier = Modifier.width(10.dp))
+                    LoadingBox(height = 16.dp, width = 100.dp, brush = brush)
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+
+                LoadingBox(height = 1.dp, widthRatio = 1f, brush = brush)
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    LoadingBox(height = 20.dp, widthRatio = 1.0f, brush = brush)
-                    Spacer(modifier = Modifier.height(10.dp))
-                    LoadingBox(height = 20.dp, widthRatio = 0.8f, brush = brush)
-                    Spacer(modifier = Modifier.height(16.dp))
-                    LoadingBox(height = 80.dp, widthRatio = 1.0f, brush = brush)
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Start,
-                    ) {
-                        LoadingBox(height = 20.dp, width = 80.dp, brush = brush)
-                        Spacer(modifier = Modifier.width(10.dp))
-                        LoadingBox(height = 20.dp, width = 80.dp, brush = brush)
-                    }
+                    LoadingBox(height = 14.dp, width = 80.dp, brush = brush)
+                    LoadingBox(height = 14.dp, width = 80.dp, brush = brush)
                 }
             }
         }
