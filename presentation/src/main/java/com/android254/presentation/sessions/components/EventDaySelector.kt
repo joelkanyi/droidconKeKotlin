@@ -19,10 +19,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.android254.presentation.common.components.AnimatedShimmerEffect
+import com.android254.presentation.common.components.LoadingBox
 import com.android254.presentation.models.EventDate
+import com.droidconke.chai.chaiColorsPalette
 
 fun ordinal(i: Int): String {
     val suffixes = arrayOf("th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th")
@@ -37,16 +41,35 @@ fun EventDaySelector(
     selectedDate: EventDate,
     updateSelectedDay: (EventDate) -> Unit,
     eventDates: List<EventDate>,
+    isLoading: Boolean = false,
 ) {
-    LazyRow {
-        items(eventDates) { eventDay ->
-            EventDaySelectorButton(
-                title = ordinal(eventDay.value.toInt()),
-                subtitle = "Day ${eventDay.day}",
-                onClick = { updateSelectedDay(eventDay) },
-                selected = selectedDate == eventDay,
-            )
-            Spacer(Modifier.width(16.dp))
+    if (isLoading) {
+        AnimatedShimmerEffect(
+            gradientColors =
+                listOf(
+                    MaterialTheme.chaiColorsPalette.loadingStateOnCardsColor.copy(alpha = 0.3f),
+                    MaterialTheme.chaiColorsPalette.loadingStateOnCardsColor.copy(alpha = 0.2f),
+                    MaterialTheme.chaiColorsPalette.loadingStateOnCardsColor.copy(alpha = 0.3f),
+                ),
+        ) { brush ->
+            LazyRow {
+                items(3) {
+                    LoadingBox(height = 51.dp, width = 51.dp, brush = brush, cornerRadius = 5.dp)
+                    Spacer(Modifier.width(16.dp))
+                }
+            }
+        }
+    } else {
+        LazyRow {
+            items(eventDates) { eventDay ->
+                EventDaySelectorButton(
+                    title = ordinal(eventDay.value.toInt()),
+                    subtitle = "Day ${eventDay.day}",
+                    onClick = { updateSelectedDay(eventDay) },
+                    selected = selectedDate == eventDay,
+                )
+                Spacer(Modifier.width(16.dp))
+            }
         }
     }
 }
