@@ -79,7 +79,7 @@ fun HomeRoute(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HomeScreen(
+internal fun HomeScreen(
     viewState: HomeState,
     isSyncing: Boolean,
     navigateToSpeakers: () -> Unit = {},
