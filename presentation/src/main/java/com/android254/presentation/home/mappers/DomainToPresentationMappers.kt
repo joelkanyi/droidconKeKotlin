@@ -15,10 +15,13 @@
  */
 package com.android254.presentation.home.mappers
 
+import com.android254.domain.models.Home
 import com.android254.domain.models.Speaker
 import com.android254.domain.models.Sponsors
+import com.android254.presentation.home.viewstate.HomeState
 import com.android254.presentation.models.SpeakerUI
 import com.android254.presentation.models.SponsorPresentationModel
+import com.android254.presentation.sessions.mappers.toPresentationModel
 
 fun List<Speaker>.toSpeakersPresentation() =
     map {
@@ -37,4 +40,15 @@ fun Sponsors.toPresentation() =
         link = link,
         logo = sponsorLogoUrl,
         sponsorType = sponsorType,
+    )
+
+fun Home.toHomeState(isSyncing: Boolean, isFirstSync: Boolean) =
+    HomeState(
+        banner = banner,
+        speakers = speakers.toSpeakersPresentation(),
+        sponsors = sponsors.map { it.toPresentation() },
+        organizerLogos = organizerLogos,
+        sessions = sessions.map { it.toPresentationModel() },
+        isSyncing = isSyncing,
+        isFirstSync = isFirstSync,
     )

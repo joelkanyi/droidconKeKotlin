@@ -15,19 +15,17 @@
  */
 package com.android254.presentation.home.viewstate
 
+import com.android254.domain.models.HomeBanner
 import com.android254.presentation.models.SessionPresentationModel
 import com.android254.presentation.models.SpeakerUI
 import com.android254.presentation.models.SponsorPresentationModel
 
-data class HomeViewState(
-    val isPosterVisible: Boolean = true,
-    val isCallForSpeakersVisible: Boolean = false,
-    val linkToCallForSpeakers: String = "",
-    val isSignedIn: Boolean = false,
+data class HomeState(
+    val banner: HomeBanner = HomeBanner.None,
     val speakers: List<SpeakerUI> = emptyList(),
-    val isSpeakersSectionVisible: Boolean = false,
     val sponsors: List<SponsorPresentationModel> = emptyList(),
-    val organizedBy: List<String> = emptyList(),
+    val organizerLogos: List<String> = emptyList(),
     val sessions: List<SessionPresentationModel> = emptyList(),
-    val isSessionsSectionVisible: Boolean = false,
+    val isFirstSync: Boolean = true,
+    val isSyncing: Boolean = true
 )
