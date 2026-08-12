@@ -24,6 +24,11 @@ import com.android254.domain.work.SyncDataWorkManager
 import com.android254.droidconKE2023.crashlytics.CrashlyticsTree
 import dagger.hilt.android.HiltAndroidApp
 import ke.droidcon.kotlin.BuildConfig
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.jetbrains.annotations.NotNull
 import timber.log.Timber
 import javax.inject.Inject
@@ -33,13 +38,18 @@ class DroidconKE2023App : Application() {
     @Inject
     lateinit var syncDataWorkManager: SyncDataWorkManager
 
+    private val applicationScope =
+        CoroutineScope(SupervisorJob() + Dispatchers.Default)
     override fun onCreate() {
         super.onCreate()
         initTimber()
         setUpWorkerManagerNotificationChannel()
 
         syncDataWorkManager.setupPeriodicSync()
-        syncDataWorkManager.startSync()
+
+        applicationScope.launch {
+            syncDataWorkManager.startSyncIfEmpty()
+        }
     }
 
     private fun initTimber() =
